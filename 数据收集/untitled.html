@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="content-type" Content="text/html;charset=utf-8">
+<head> 
+
+<title>简易画板</title> 
+
+<script
+src="https://code.jquery.com/jquery-1.7.1.js"
+integrity="sha256-n8wkEJNAWUaIUDnfQoz6fwBRofK9vMWjE6F3qeNfiAY="
+crossorigin="anonymous"></script>
+<script src=”http://html5shiv.googlecode.com/svn/trunk/html5.js”></script>  
+<![endif]–> 
+<script> 
+
+var c1,c2,c3,c4;//获取到的2d画板
+var painting = false;//判断是否正在绘画，即鼠标左键是否长按下去
+var canvas1,canvas2,canvas3,canvas4;//画
+function clearCanvas1()  
+{  
+    var c=document.getElementById("myCanvas");  
+    var cxt=c.getContext("2d");  
+    cxt.clearRect(0,0,c.width,c.height);  
+	 cxt.fillStyle="#000000";
+    cxt.fillRect(0,0,c.width,c.height);
+}  
+function clearCanvas2()  
+{  
+    var c=document.getElementById("myCanvas2");  
+    var cxt=c.getContext("2d");  
+    cxt.clearRect(0,0,c.width,c.height);  
+	 cxt.fillStyle="#000000";
+    cxt.fillRect(0,0,c.width,c.height);
+}  
+function clearCanvas3()  
+{  
+    var c=document.getElementById("myCanvas3");  
+    var cxt=c.getContext("2d");  
+    cxt.clearRect(0,0,c.width,c.height);  
+	 cxt.fillStyle="#000000";
+    cxt.fillRect(0,0,c.width,c.height);
+}  
+function clearCanvas4()  
+{  
+    var c=document.getElementById("myCanvas4");  
+    var cxt=c.getContext("2d");  
+    cxt.clearRect(0,0,c.width,c.height);  
+	 cxt.fillStyle="#000000";
+    cxt.fillRect(0,0,c.width,c.height);
+}  
+function Download(){
+        //cavas 保存图片到本地  js 实现
+        //------------------------------------------------------------------------
+        //1.确定图片的类型  获取到的图片格式 data:image/Png;base64,...... 
+        var type ='png';//你想要什么图片格式 就选什么吧
+        var d=document.getElementById("cavasimg");
+        var imgdata=d.toDataURL(type);
+        //2.0 将mime-type改为image/octet-stream,强制让浏览器下载
+        var fixtype=function(type){
+            type=type.toLocaleLowerCase().replace(/jpg/i,'jpeg');
+            var r=type.match(/png|jpeg|bmp|gif/)[0];
+            return 'image/'+r;
+        };
+        imgdata=imgdata.replace(fixtype(type),'image/octet-stream');
+        //3.0 将图片保存到本地
+        var savaFile=function(data,filename)
+        {
+            var save_link=document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+            save_link.href=data;
+            save_link.download=filename;
+            var event=document.createEvent('MouseEvents');
+            event.initMouseEvent('click',true,false,window,0,0,0,0,0,false,false,false,false,0,null);
+            save_link.dispatchEvent(event);
+        };
+        var filename=''+new Date().getSeconds()+'.'+type;  
+        //我想用当前秒是可以解决重名的问题了 不行你就换成毫秒
+        savaFile(imgdata,filename);
+        };
+
+$(function(){
+canvas1=document.getElementById("myCanvas");
+c1=canvas1.getContext("2d");
+c1.lineCap="round";//设置笔迹边角，否则笔迹会出现断层
+c1.strokeStyle="#ffffff ";//笔迹的颜色
+c1.lineWidth=30;//笔迹的粗细
+c1.strokeStyle=$(this).val();//设置画笔状态
+c1.lineWidth=$(this).val(); 
+
+
+canvas2=document.getElementById("myCanvas2");
+c2=canvas2.getContext("2d");
+c2.lineCap="round";//设置笔迹边角，否则笔迹会出现断层
+c2.strokeStyle="#ffffff ";//笔迹的颜色
+c2.lineWidth=30;//笔迹的粗细
+c2.strokeStyle=$(this).val();//设置画笔状态
+c2.lineWidth=$(this).val(); 
+
+
+canvas3=document.getElementById("myCanvas3");
+c3=canvas3.getContext("2d");
+c3.lineCap="round";//设置笔迹边角，否则笔迹会出现断层
+c3.strokeStyle="#ffffff ";//笔迹的颜色
+c3.lineWidth=30;//笔迹的粗细
+c3.strokeStyle=$(this).val();//设置画笔状态
+c3.lineWidth=$(this).val(); 
+
+
+canvas4=document.getElementById("myCanvas4");
+c4=canvas4.getContext("2d");
+c4.lineCap="round";//设置笔迹边角，否则笔迹会出现断层
+c4.strokeStyle="#ffffff ";//笔迹的颜色
+c4.lineWidth=30;//笔迹的粗细
+c4.strokeStyle=$(this).val();//设置画笔状态
+c4.lineWidth=$(this).val(); 
+
+
+ }); 
+var p_x;//上次鼠标位置
+var p_y;
+var p_x_now;//当前瞬间鼠标位置
+var p_y_now; 
+$(document).mousedown(function(e){//鼠标按下触发事件 
+
+// alert(sizeE);
+p_x= e.clientX;//获取位置，并置为上次鼠标位置
+p_y= e.clientY;
+painting = true;//画笔启动标志 
+
+
+});
+$(document).mousemove(function(e){//鼠标移动触发事件
+if(painting==true)//处于画笔激活状态
+{
+//alert(1);
+p_x_now= e.clientX;//当前瞬间的鼠标位置
+p_y_now= e.clientY;
+c1.beginPath();//开始路径
+c1.moveTo(p_x-5-canvas1.offsetLeft,p_y-5-canvas1.offsetTop);//移动到起始点
+c1.lineTo(p_x_now-5-canvas1.offsetLeft,p_y_now-5-canvas1.offsetTop);//从起始点画直线到终点 
+c1.stroke();
+c1.closePath();//封闭路径，这个很重要，如果路径不封闭，
+// 那么只要canvas颜色发生改变，所有的之前画过的颜色都发生改变
+
+
+c2.beginPath();//开始路径
+c2.moveTo(p_x-5-canvas2.offsetLeft,p_y-5-canvas2.offsetTop);//移动到起始点
+c2.lineTo(p_x_now-5-canvas2.offsetLeft,p_y_now-5-canvas2.offsetTop);//从起始点画直线到终点 
+c2.stroke();
+c2.closePath();//封闭路径，这个很重要，如果路径不封闭，
+
+
+c3.beginPath();//开始路径
+c3.moveTo(p_x-5-canvas3.offsetLeft,p_y-5-canvas3.offsetTop);//移动到起始点
+c3.lineTo(p_x_now-5-canvas3.offsetLeft,p_y_now-5-canvas3.offsetTop);//从起始点画直线到终点 
+c3.stroke();
+c3.closePath();//封闭路径，这个很重要，如果路径不封闭，
+
+
+c4.beginPath();//开始路径
+c4.moveTo(p_x-5-canvas4.offsetLeft,p_y-5-canvas4.offsetTop);//移动到起始点
+c4.lineTo(p_x_now-5-canvas4.offsetLeft,p_y_now-5-canvas4.offsetTop);//从起始点画直线到终点 
+c4.stroke();
+c4.closePath();//封闭路径，这个很重要，如果路径不封闭，
+p_x = p_x_now;//一次迭代后讲当前的瞬间坐标值赋给上次鼠标坐标值
+p_y = p_y_now;
+} 
+
+}); 
+
+$(document).mouseup(function(e){//鼠标松开触发事件 
+
+painting=false;//冻结画笔
+}); 
+</script>
+</head>
+<body>
+<div >
+  <table width="1036 " border="1">
+    <tr>
+     <th width="252" scope="col"><div >
+       <button type="button" onclick=javaScript:clearCanvas1()>清空</button>
+     </div></th>
+     <th width="252" scope="col"><div >
+       <button type="button" onclick=javaScript:clearCanvas2()>清空</button>
+     </div></th>
+     <th width="252" scope="col"><div >
+       <button type="button" onclick=javaScript:clearCanvas3()>清空</button>
+     </div></th>
+     <th width="252" scope="col"><div >
+       <button type="button" onclick=javaScript:clearCanvas4()>清空</button>
+     </div></th>
+   </tr>
+ </table>
+</div>
+<!--<button id="btn">btn</button>--><!--整个画布--> 
+
+
+<canvas id="myCanvas" width=250 height=250 style="border: solid"></canvas>
+<script type="text/javascript">
+    var c=document.getElementById("myCanvas");
+    var cxt=c.getContext("2d");
+    cxt.fillStyle="#000000";
+    cxt.fillRect(0,0,c.width,c.height );
+</script> 
+<canvas id="myCanvas2" width=250 height=250 style="border: solid"></canvas>
+<script type="text/javascript">
+    var c=document.getElementById("myCanvas2");
+    var cxt=c.getContext("2d");
+    cxt.fillStyle="#000000";
+    cxt.fillRect(0,0,c.width,c.height );
+</script> 
+<canvas id="myCanvas3" width=250 height=250 style="border: solid"></canvas>
+<script type="text/javascript">
+    var c=document.getElementById("myCanvas3");
+    var cxt=c.getContext("2d");
+    cxt.fillStyle="#000000";
+    cxt.fillRect(0,0,c.width,c.height );
+</script> 
+<canvas id="myCanvas4" width=250 height=250 style="border: solid"></canvas>
+<script type="text/javascript">
+    var c=document.getElementById("myCanvas4");
+    var cxt=c.getContext("2d");
+    cxt.fillStyle="#000000";
+    cxt.fillRect(0,0,c.width,c.height );
+</script> 
+<div ></div>
+<table width="1036" border="0" color="000000">
+  <tr>
+    <th width="252" scope="col">在此写+</th>
+    <th width="252" scope="col">在此写-</th>
+    <th width="252" scope="col">在此写×</th>
+    <th width="252" scope="col">在此写÷</th>
+  </tr>
+</table>
+<p>请在绘图板上按右键保存图片到本地</p>
+<p>并发送到1286427633@qq.com</p>
+</body>
+</html>
