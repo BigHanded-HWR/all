@@ -28,10 +28,10 @@ def max_pool_2x2(x):
 IMAGE_HEIGHT = 28
 IMAGE_WIDTH = 28
 CHAR_SET_LEN = 10
-xs = tf.placeholder(tf.float32, [None, IMAGE_HEIGHT * IMAGE_WIDTH],name='input')
+xs = tf.placeholder(tf.float32, [None, IMAGE_HEIGHT * IMAGE_WIDTH],name='input')#input在这吗 声明一个float32类型的未知宽度，长度为28*28的矩阵形状，名字叫input
 ys = tf.placeholder(tf.float32, [None, 10],name='labels')
 keep_prob = tf.placeholder(tf.float32, name='keep_prob')
-x_image = tf.reshape(xs, [-1, IMAGE_HEIGHT, IMAGE_WIDTH, 1])
+x_image = tf.reshape(xs, [-1, IMAGE_HEIGHT, IMAGE_WIDTH, 1])#将input矩阵的形状变成一个四维张量
 
 
 def code_cnn():
@@ -54,8 +54,8 @@ def code_cnn():
     h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob) 
     # 4
     W_fc2 = weigth_variable([1024, 10])
-    b_fc2 = bias_varibale([10])
-    prediction = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2,name="output")
+    b_fc2 = bias_varibale([10])#10个0.1组成的一行
+    prediction = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2,name="output")#这是输出吗
     return prediction
 
 

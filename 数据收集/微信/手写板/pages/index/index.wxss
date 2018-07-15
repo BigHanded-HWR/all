@@ -6,5 +6,5 @@ page{
 canvas{
  border: 1px solid #d0d0d0;
  margin: 5rpx;
- background: #ffffff
+ background: #000000
 }
