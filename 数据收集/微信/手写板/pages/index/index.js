@@ -113,8 +113,8 @@ Page({
     console.log("不是空的，canvas即将生成图片")
     //生成图片
     wx.canvasToTempFilePath({ 
-      destHeight:28,
-      destWidth:28,
+      destHeight:700,
+      destWidth:700,
       canvasId: 'canvas',
       success: function (res) {
         console.log("canvas可以生成图片")
