@@ -30,7 +30,7 @@ namespace hwr
             this.Load();
             Bitmap bmpTest = new Bitmap(imgName);
             //处理接受到的图片
-            //if (!((bmpTest.Height == 28) && (bmpTest.Width == 28))) bmpTest = GetSmall(bmpTest);
+            if (!((bmpTest.Height == 28) && (bmpTest.Width == 28))) bmpTest = GetSmall(bmpTest);
             float[] Value = new float[784];
 
             float pixelmin = bmpTest.GetPixel(0, 0).R;
