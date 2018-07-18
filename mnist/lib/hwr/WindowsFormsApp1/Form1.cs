@@ -28,13 +28,14 @@ namespace WindowsFormsApp1
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             //openFileDialog.Filter = "jpg files (*.jpg)|*.jpg|All files(*.*)|*>**";
-            openFileDialog.Filter = "jpg files (*.jpg)|*.png|All files(*.*)|*>**";
+            openFileDialog.Filter = "jpg files (*.png)|*.png|All files(*.*)|*>**";
             openFileDialog.FilterIndex = 1;
             openFileDialog.RestoreDirectory = true;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 var a = new InferImage();
-                label1.Text=a.RecImg(openFileDialog.FileName);
+                Bitmap bmpTest = new Bitmap(openFileDialog.FileName);
+                label1.Text=a.RecImg(bmpTest);
             }
         }
     }
