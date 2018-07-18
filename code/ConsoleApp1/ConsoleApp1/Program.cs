@@ -11,7 +11,7 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             StringToMath stm = new StringToMath();
-            string t = "1";
+            string t = "1/0";
             int x = 0;
             // Console.WriteLine(t[1]);
             try
@@ -23,6 +23,11 @@ namespace ConsoleApp1
             catch (StringIsEmptyException)
             {
                 Console.WriteLine("error: input is empty!");
+                Console.ReadLine();
+            }
+            catch(DivideByZeroException)
+            {
+                Console.WriteLine("error: Divide By Zero !");
                 Console.ReadLine();
             }
             
@@ -62,7 +67,16 @@ public class StringToMath
                             case '+': oldnum = oldnum + num; break;
                             case '-': oldnum = oldnum - num; break;
                             case '*': oldnum = oldnum * num; break;
-                            case '/': oldnum = oldnum / num; break;
+                            case '/':try
+                                    {
+                                       oldnum = oldnum / num;
+                                       break;
+                                     }
+                                     catch (DivideByZeroException)
+                                     {
+                                      throw (new DivideByZeroException("Divide by zero found"));    
+                                     }
+                                      
                         }
 
                     }
