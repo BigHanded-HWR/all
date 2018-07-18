@@ -25,10 +25,10 @@ namespace hwr
             session = new TFSession(graph);
             graph.Import(model, "");
         }
-        public string RecImg(String imgName)
+        public string RecImg(Bitmap bmpTest)
         {
             this.Load();
-            Bitmap bmpTest = new Bitmap(imgName);
+            //Bitmap bmpTest = new Bitmap(imgName);
             //处理接受到的图片
             if (!((bmpTest.Height == 28) && (bmpTest.Width == 28))) bmpTest = GetSmall(bmpTest);
             float[] Value = new float[784];

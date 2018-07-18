@@ -34,7 +34,8 @@ namespace WindowsFormsApp1
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 var a = new InferImage();
-                label1.Text=a.RecImg(openFileDialog.FileName);
+                Bitmap bmpTest = new Bitmap(openFileDialog.FileName);
+                label1.Text=a.RecImg(bmpTest);
             }
         }
     }

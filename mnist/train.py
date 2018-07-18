@@ -211,7 +211,7 @@ def get_image_path_labels(IMAGE_PATH=IMAGE_PATH, LABEL_PATH=LABEL_PATH, IMAGE_MU
 
 def main():
     image_paths, labels = get_image_path_labels()
-    pb_file_path = "examplenet.pb"
+    pb_file_path = "my.pb"
     train_code_cnn(image_paths, pb_file_path, labels)
 
 
