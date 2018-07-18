@@ -11,12 +11,15 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             StringToMath stm = new StringToMath();
-            string t = "";
+            string t = "8+8+8*3*6+7-1";
             int x = 0;
             // Console.WriteLine(t[1]);
             try
             {
-                stm.Button2_Click(t);
+                x = stm.Button2_Click(t);
+                Console.WriteLine("{0}={1}", t, x);
+                Console.ReadLine();
+
             }
             catch (StringIsEmptyException)
             {
@@ -70,8 +73,12 @@ public class StringToMath
 #pragma warning restore IDE0017 // Simplify object initialization
         sc.Language = "JavaScript";
         var x=sc.Eval(t);
-        if (x == sc.Eval("5/0")) ;
-        throw (new DivideByZeroException("Divide by zero found"));
+        if (x == sc.Eval("5/0")) 
+            throw (new DivideByZeroException("Divide by zero found")); 
+        else
+         {
+                return (int)x;
+         }
         }
         else
         {
