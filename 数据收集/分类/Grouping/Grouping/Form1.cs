@@ -129,7 +129,7 @@ namespace Grouping
                         string newTxtPath = fp + "\\label.txt";
                         Bitmap mp = ReadImageFile(imgFile[n + 1]);
                         StreamWriter sw = new StreamWriter(newTxtPath, true, Encoding.Default);
-                        sw.Write(e.KeyChar.ToString());
+                        sw.Write(((int)e.KeyChar).ToString());
                         sw.Write(",");
                         sw.Flush();
                         sw.Close();
@@ -143,7 +143,7 @@ namespace Grouping
                         string fp = imgPath + "\\export\\";
                         string newTxtPath = fp + "\\label.txt";
                         StreamWriter sw = new StreamWriter(newTxtPath, true, Encoding.Default);
-                        sw.Write(e.KeyChar.ToString());
+                        sw.Write(((int)e.KeyChar).ToString());
                         sw.Flush();
                         sw.Close();
 
