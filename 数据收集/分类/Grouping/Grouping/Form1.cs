@@ -129,7 +129,7 @@ namespace Grouping
                         string newTxtPath = fp + "\\label.txt";
                         Bitmap mp = ReadImageFile(imgFile[n + 1]);
                         StreamWriter sw = new StreamWriter(newTxtPath, true, Encoding.Default);
-                        sw.Write(((int)e.KeyChar).ToString());
+                        sw.Write(e.KeyChar.ToString());
                         sw.Write(",");
                         sw.Flush();
                         sw.Close();
@@ -143,7 +143,7 @@ namespace Grouping
                         string fp = imgPath + "\\export\\";
                         string newTxtPath = fp + "\\label.txt";
                         StreamWriter sw = new StreamWriter(newTxtPath, true, Encoding.Default);
-                        sw.Write(((int)e.KeyChar).ToString());
+                        sw.Write(e.KeyChar.ToString());
                         sw.Flush();
                         sw.Close();
 
@@ -199,6 +199,27 @@ namespace Grouping
         
         private void button2_Click(object sender, EventArgs e)
         {
+            string newTxtPath = "F:\\mnist\\data\\image\\test\\label.txt";
+            StreamWriter sw = new StreamWriter(newTxtPath, true, Encoding.Default);
+            for (int i = 1; i <= 100; i++)
+            {
+                sw.Write("+,");
+            }
+            for (int i = 1; i <= 100; i++)
+            {
+                sw.Write("-,");
+            }
+            for (int i = 1; i <= 100; i++)
+            {
+                sw.Write("*,");
+            }
+
+            for (int i = 1; i <= 100; i++)
+            {
+                sw.Write("/,");
+            }
+            sw.Flush();
+            sw.Close();
             /*
             //弹出一个窗口让用户选图片的路径
             imgPath = selectPath();
@@ -264,8 +285,129 @@ namespace Grouping
 
      }*/
         }
-        
-        
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            n = 0;
+            List<string> outText = new List<string>();
+            List<int> point = new List<int>();
+            //List<int> bb = new List<int>() { 1,2,3,4,5 };
+
+            //首先读取现有的文件
+            string fp = "F:\\mnist\\data\\image\\train\\";
+            //string fp = "C:\\Users\\29951\\Desktop\\mnist\\train-images\\1\\";
+            //Directory.CreateDirectory(fp);
+            //File.Move(imgFile[n], fp + (int.Parse(textBox1.Text) + n).ToString() + ".png");
+            //清除文件缓存
+            imgFile = new List<string>() { };
+            string[] strs;
+            strs = Directory.GetFiles(fp);
+            //将图片保存到数组
+            for(var i =0;i< strs.Length;i++)
+            {
+                FileInfo fi = new FileInfo(strs[i]);
+                if (fi.Extension == ".png")
+                {
+                    imgFile.Add(i.ToString()+".png");
+                    point.Add(i);
+                    //Console.WriteLine(i.ToString() + ".png");
+                }
+                if (fi.Extension == ".PNG")
+                {
+                    Console.WriteLine(fi.Name);
+                    //File.Copy(strs[i],fp+i.ToString()+".png", true);
+                    imgFile.Add(i.ToString() + ".png");
+                    point.Add(i);
+                    //Console.WriteLine(i.ToString() + ".png");
+                }
+            }
+            //strs = null;
+            //读取label
+            //string s = File.ReadAllText(fp + "code_train_text.txt");
+            string s = File.ReadAllText("F:\\mnist\\data\\code_train_text.txt");
+            string[] ss=s.Split(new Char[] { ',' });
+           
+            s = null;
+            foreach(string i in ss)
+            {
+                outText.Add(i);
+            }
+            ss = null;
+
+            //随机
+            point = GetRandom(point);
+            n = 0;
+            //n被随机到了point[n]的位置
+            List<string> kk = new List<string>();
+            //用kk保存变换后的文件列表
+            foreach (string t in outText)//将文本数组乱序
+            {
+                kk.Add(outText[point[n]]);
+                Console.Write(" " + outText[point[n]]);
+
+                n++;
+            }
+            n = 0;
+            Console.Write("\n");
+            string op = "";
+            foreach (string t in kk)//将文本数组输出成字符串
+            {
+                op = op.Insert(op.Length, ",");
+                op = op.Insert(op.Length, t);
+            }
+            Directory.CreateDirectory(fp + "exports\\");
+            File.AppendAllText(fp + "exports\\lab.txt", op);
+            //处理文件
+            kk = new List<string>();
+            foreach (string t in imgFile)
+            {
+                kk.Add(imgFile[point[n]]);
+                n++;
+            }
+
+            n = 0;
+            foreach (string tt in imgFile)
+            {
+                Console.Write(kk[n].ToString()+" to "+ imgFile[n].ToString());
+                //将源文件拷贝到新文件位置
+                File.Copy(fp + kk[n], fp + "exports\\" + imgFile[n], true);
+                //File.Move(imgFile[n], fp + aa[n]+ ".png");
+                n++;
+            }
+            Console.Write("\n");
+            n = 0;
+            
+            
         }
 
+        private List<int> GetRandom(List<int> myList)
+        {
+
+            Random ran = new Random();
+            List<int> newList = new List<int>();
+            int index = 0;
+            int temp = 0;
+            for (int i = 0; i < myList.Count; i++)
+            {
+
+                index = ran.Next(0, myList.Count - 1);
+                if (index != i)
+                {
+                    temp = myList[i];
+                    myList[i] = myList[index];
+                    myList[index] = temp;
+                }
+                Console.WriteLine(i.ToString());
+            }
+
+            return myList;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string a = "F:\\mnist\\data\\image\\1\\";
+
+        }
     }
+
+}

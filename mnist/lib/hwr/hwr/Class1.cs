@@ -60,32 +60,29 @@ namespace hwr
 
             var tensor = new TFTensor(Value);
 
-            //try
-            //{
-                var runner = session.GetRunner();
-                runner.AddInput(graph["input"][0], tensor).AddInput(graph["keep_prob"][0], 1.0f).Fetch(graph["output"][0]);
-                var output = runner.Run();
+            var runner = session.GetRunner();
+            runner.AddInput(graph["input"][0], tensor).AddInput(graph["keep_prob"][0], 1.0f).Fetch(graph["output"][0]);
+            var output = runner.Run();
 
-                var result = output[0];
-                var bestIdx = 0;
-                float p = 0, best = 0;
-                var probabilities = ((float[][])result.GetValue(jagged: true))[0];
-                for (int i = 0; i < probabilities.Length; i++)
+            var result = output[0];
+            var bestIdx = 0;
+            List<int> inf = new List<int>();
+            float p = 0, best = 0;
+            var probabilities = ((float[][])result.GetValue(jagged: true))[0];
+            for (int i = 0; i < probabilities.Length; i++)
+            {
+                if (probabilities[i] > best)
                 {
-                    if (probabilities[i] > best)
-                    {
-                        bestIdx = i;
-                        best = probabilities[i];
-                    }
+                    bestIdx = i;
+                    inf.Add(i);
+                    best = probabilities[i];
+                    Console.WriteLine(probabilities[i]);
                 }
-                return bestIdx.ToString();
-           // }
-            //catch(Exception ex)
-            //{
-                //throw new Exception("ERROR",ex);
-            //};
-            
-            //return "x";
+            }
+
+            return bestIdx.ToString();
+            //return inf[1].ToString();
+
         }
         private Bitmap GetSmall(Bitmap bm)
         {

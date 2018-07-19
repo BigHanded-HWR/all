@@ -4,7 +4,7 @@ from PIL import Image
 import random
 from tensorflow.python.framework import graph_util
 
-IMAGE_MUMBER = 59999
+IMAGE_MUMBER = 100229
 EPOCH = 30
 BATCH_SIZE = 100
 IMAGE_PATH = "F:/mnist/data/image/train/"
@@ -27,9 +27,9 @@ def max_pool_2x2(x):
 
 IMAGE_HEIGHT = 28
 IMAGE_WIDTH = 28
-CHAR_SET_LEN = 10
+CHAR_SET_LEN = 14
 xs = tf.placeholder(tf.float32, [None, IMAGE_HEIGHT * IMAGE_WIDTH],name='input')#input在这吗 声明一个float32类型的未知宽度，长度为28*28的矩阵形状，名字叫input
-ys = tf.placeholder(tf.float32, [None, 10],name='labels')
+ys = tf.placeholder(tf.float32, [None, 14],name='labels')
 keep_prob = tf.placeholder(tf.float32, name='keep_prob')
 x_image = tf.reshape(xs, [-1, IMAGE_HEIGHT, IMAGE_WIDTH, 1])#将input矩阵的形状变成一个四维张量
 
@@ -53,8 +53,8 @@ def code_cnn():
     h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
     h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob) 
     # 4
-    W_fc2 = weigth_variable([1024, 10])
-    b_fc2 = bias_varibale([10])#10个0.1组成的一行
+    W_fc2 = weigth_variable([1024, 14])
+    b_fc2 = bias_varibale([14])#10个0.1组成的一行
     prediction = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2,name="output")#这是输出吗
     return prediction
 
@@ -68,11 +68,23 @@ def convert2gray(img):
 
 def text2vec(text):
     text_len = len(text)
-    vector = np.zeros(1 * CHAR_SET_LEN)
+    vector = np.zeros(1 * CHAR_SET_LEN)#一个一行的，某个参数长度的数组，默认全是0
 
     def char2pos(c):
         if c == '_':
             k = 62
+            return k
+        if c == '+':
+            k = 10
+            return k
+        if c == '-':
+            k = 11
+            return k
+        if c == '*':
+            k = 12
+            return k
+        if c == '/':
+            k = 13
             return k
         k = ord(c) - 48
         if k > 9:
@@ -84,10 +96,10 @@ def text2vec(text):
         return k
 
     for i, c in enumerate(text):
-        idx = i * CHAR_SET_LEN + char2pos(c)
-        vector[idx] = 1
+        idx = i * CHAR_SET_LEN + char2pos(c)#字符数组的下标×10+将当前字符进行转义
+        vector[idx] = 1#每个元素都是1，其他的是0
     return vector
-
+'''
 def vec2text(vec):
     char_pos = vec.nonzero()[0]
     text = []
@@ -106,10 +118,10 @@ def vec2text(vec):
             raise ValueError('error')
         text.append(chr(char_code))
     return "".join(text)
-
+'''
 def get_next_batch(batch_size, each, images, labels):
     batch_x = np.zeros([batch_size, IMAGE_HEIGHT * IMAGE_WIDTH])
-    batch_y = np.zeros([batch_size, 10])
+    batch_y = np.zeros([batch_size, 14])
 
     def get_text_and_image(i, each):
         image_num = each * batch_size + i
