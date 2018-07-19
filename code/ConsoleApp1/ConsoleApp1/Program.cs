@@ -11,22 +11,48 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             StringToMath stm = new StringToMath();
-            string t = "1";
+            string t = "8+8+8*3*6+7-1";
             int x = 0;
             // Console.WriteLine(t[1]);
             try
             {
-                x = stm.ShowMath(t);
-                Console.WriteLine("{0}={1}",t,x);
+                x = stm.Button2_Click(t);
+                Console.WriteLine("{0}={1}", t, x);
                 Console.ReadLine();
+
             }
             catch (StringIsEmptyException)
             {
                 Console.WriteLine("error: input is empty!");
                 Console.ReadLine();
             }
-            
+            catch (DivideByZeroException)
+            {
+                Console.WriteLine("error: Divide By Zero !");
+                Console.ReadLine();
+            }
+
+            /*try
+            {
+                x = stm.ShowMath(t);
+                Console.WriteLine("{0}={1}",t,x);
+                Console.ReadLine();
+            }
+             catch (StringIsEmptyException)
+            {
+                Console.WriteLine("error: input is empty!");
+                Console.ReadLine();
+            }
+            catch (DivideByZeroException)
+            {
+                Console.WriteLine("error: Divide By Zero !");
+                Console.ReadLine();
+            }*/
+
+
+
         }
+
 
     }
 }
@@ -39,13 +65,36 @@ public class StringIsEmptyException : ApplicationException
 }
 public class StringToMath
 {
-    public int ShowMath(string s)
+    public int Button2_Click(string t)
+    {
+#pragma warning disable IDE0017 // Simplify object initialization
+        if(t.Length>0)
+        {  MSScriptControl.ScriptControl sc = new MSScriptControl.ScriptControlClass();
+#pragma warning restore IDE0017 // Simplify object initialization
+        sc.Language = "JavaScript";
+        var x=sc.Eval(t);
+        if (x == sc.Eval("5/0")) 
+            throw (new DivideByZeroException("Divide by zero found")); 
+        else
+         {
+                return (int)x;
+         }
+        }
+        else
+        {
+            throw (new StringIsEmptyException("Empty input found"));
+        }
+    }
+    /*public int ShowMath(string s)
     {
         if (s.Length > 0)
         {
             int num = 0;
             int oldnum = 0;
+            int lastnum = 0;
+            int eldnum = 0;
             char math = '+';
+            char lmath = '+';
             int i = 0,l=s.Length;
 
             for (i = 0; i < s.Length; i++)
@@ -62,7 +111,16 @@ public class StringToMath
                             case '+': oldnum = oldnum + num; break;
                             case '-': oldnum = oldnum - num; break;
                             case '*': oldnum = oldnum * num; break;
-                            case '/': oldnum = oldnum / num; break;
+                            case '/':try
+                                    {
+                                       oldnum = oldnum / num;
+                                       break;
+                                     }
+                                     catch (DivideByZeroException)
+                                     {
+                                      throw (new DivideByZeroException("Divide by zero found"));    
+                                     }
+                                      
                         }
 
                     }
@@ -87,7 +145,7 @@ public class StringToMath
         {
             throw (new StringIsEmptyException("Empty input found"));
         }
-    }
+    }*/
 }
 
 
