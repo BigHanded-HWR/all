@@ -312,14 +312,17 @@ namespace Grouping
                     point.Add(i);
                     //Console.WriteLine(i.ToString() + ".png");
                 }
+                /*
                 if (fi.Extension == ".PNG")
                 {
                     Console.WriteLine(fi.Name);
-                    //File.Copy(strs[i],fp+i.ToString()+".png", true);
+                    Directory.CreateDirectory(fp + "exports\\");
+                    File.Copy(strs[i],fp+i.ToString()+".png", true);
                     imgFile.Add(i.ToString() + ".png");
                     point.Add(i);
                     //Console.WriteLine(i.ToString() + ".png");
                 }
+                */
             }
             //strs = null;
             //读取label
