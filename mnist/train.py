@@ -4,7 +4,7 @@ from PIL import Image
 import random
 from tensorflow.python.framework import graph_util
 
-IMAGE_MUMBER = 100229
+IMAGE_MUMBER = 63999
 EPOCH = 30
 BATCH_SIZE = 100
 IMAGE_PATH = "F:/mnist/data/image/train/"
@@ -97,6 +97,8 @@ def text2vec(text):
 
     for i, c in enumerate(text):
         idx = i * CHAR_SET_LEN + char2pos(c)#字符数组的下标×10+将当前字符进行转义
+        if idx == -24:
+            print(text,i,c)
         vector[idx] = 1#每个元素都是1，其他的是0
     return vector
 '''
