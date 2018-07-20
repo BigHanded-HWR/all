@@ -117,7 +117,7 @@ namespace bmpWrite
 
         private void Work_Click(object sender, EventArgs e)
         {
-            Boolean flag = false;
+            Boolean flag = false,oflag=false;
             int m = 0;
             var bitList = new List<Bitmap>(MnistImageSize * MnistImageSize);
 
@@ -126,13 +126,13 @@ namespace bmpWrite
                 for (var y = 0; y < MnistImageSize; y++)
                 {
                     
-                    if (grayTmp.GetPixel(x, y) == Color.White)
+                    if (grayTmp.GetPixel(x, y) .R== 255 )
                     {
                         flag = true;
                     }
                     Console.WriteLine(flag);
                 }
-                if (flag == false)
+                if (flag == false&&oflag==true)
                 {
                     Bitmap cut = new Bitmap(28, 28);
                     /*for (var i = m; i < x; i++)
@@ -140,21 +140,26 @@ namespace bmpWrite
                             cut.SetPixel(i,j, grayTmp.GetPixel(i+m,j));*/
 
                     //pictureBox2.Image = cut;
-                    bitList.Add(CaptureImage(grayTmp, m, 0, x - m + 1, MnistImageSize));
+                    bitList.Add(CaptureImage(grayTmp, m, 0, x - m , MnistImageSize));
                     //Console.WriteLine(x-m+1);
                     m = x;
+                    oflag = false;
                     //pictureBox2.Image = cut;
                 }
-                else
+                else if(flag == true && oflag == true)
                 {
 
                     flag = false;
+                }
+                else if(flag == true && oflag ==false )
+                {
+                    oflag = true;
                 }
             }
             if (bitList.Count() != 0)
             {
 
-                 pictureBox2.Image = bitList[1];
+                 pictureBox2.Image = bitList[0];
                 //pictureBox2.Image = grayTmp;
             }
         }
