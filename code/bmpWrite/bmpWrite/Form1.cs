@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hwr;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,6 +21,7 @@ namespace bmpWrite
         private Bitmap digitImage;//用来保存手写数字
         private Bitmap grayTmp;
         private Point startPoint;//用于绘制线段，作为线段的初始端点坐标
+        private string t;
         private const int MnistImageSize = 28;//Mnist模型所需的输入图片大小
         private void button1_Click(object sender, EventArgs e)
         {
@@ -44,6 +46,7 @@ namespace bmpWrite
             Graphics g = Graphics.FromImage(digitImage);
             g.Clear(Color.Black);
             pictureBox1.Image = digitImage;
+           
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -110,15 +113,16 @@ namespace bmpWrite
             return(Bitmap) saveImage;
            // saveImage.Save(toImagePath, ImageFormat.Png);
             //释放资源   
-            saveImage.Dispose();
-            graphic.Dispose();
-            bitmap.Dispose();
+           // saveImage.Dispose();
+            //graphic.Dispose();
+           // bitmap.Dispose();
         }
 
         private void Work_Click(object sender, EventArgs e)
         {
             Boolean flag = false,oflag=false;
             int m = 0;
+            t = "";
             var bitList = new List<Bitmap>(MnistImageSize * MnistImageSize);
 
             for (var x = 0; x < MnistImageSize; x++)
@@ -130,7 +134,7 @@ namespace bmpWrite
                     {
                         flag = true;
                     }
-                    Console.WriteLine(flag);
+                   // Console.WriteLine(flag);
                 }
                 if (flag == false&&oflag==true)
                 {
@@ -141,10 +145,11 @@ namespace bmpWrite
 
                     //pictureBox2.Image = cut;
                     bitList.Add(CaptureImage(grayTmp, m, 0, x - m , MnistImageSize));
+                    
                     //Console.WriteLine(x-m+1);
                     m = x;
                     oflag = false;
-                    //pictureBox2.Image = cut;
+                    //pictureBox2.Image = bitList[0];
                 }
                 else if(flag == true && oflag == true)
                 {
@@ -158,9 +163,33 @@ namespace bmpWrite
             }
             if (bitList.Count() != 0)
             {
+                
+                for (var i = 0; i < bitList.Count(); i++)
+                {
+                   
+                    Bitmap bmpTest = bitList[i];
+                    var a = new InferImage();
+                    List<float[]> probabities = a.RecImg(bmpTest);
+                    t = t+(probabities[probabities.Count() - 1][0].ToString());
+                    label1.Text = t;
+                    Console.WriteLine(t);
+               
 
-                 pictureBox2.Image = bitList[0];
-                //pictureBox2.Image = grayTmp;
+                }
+                try
+                {
+                    StringToMath stm = new StringToMath();
+                    label1.Text = t + "=" + stm.STM(t);
+                }
+                catch (StringIsEmptyException)
+                {
+                    Console.WriteLine("String Is Empty ");
+                }
+                catch (DivideByZeroException)
+                {
+                    Console.WriteLine("Divide By Zero");
+                }
+
             }
         }
 
@@ -168,5 +197,107 @@ namespace bmpWrite
         {
 
         }
+
     }
+
+    public class StringToMath
+    {
+        public int STM(string t)
+        {
+//#pragma warning disable IDE0017 // Simplify object initialization
+            if (t.Length > 0)
+            {
+               /* MSScriptControl.ScriptControl sc = new MSScriptControl.ScriptControl();
+#pragma warning restore IDE0017 // Simplify object initialization
+                sc.Language = "JavaScript";*/
+                // var x = sc.Eval(t);
+                var x = new System.Data.DataTable().Compute(t, "");
+                var c = new System.Data.DataTable().Compute("5/0", "");
+                //if (x == sc.Eval("5/0"))
+                if (x == c)
+                {
+                    throw (new DivideByZeroException("Divide by zero found"));
+                }
+                else
+                {
+                    return (int)x;
+                }
+            }
+            else
+            {
+                throw (new StringIsEmptyException("Empty input found"));
+            }
+        }
+        /*public int ShowMath(string s)
+        {
+            if (s.Length > 0)
+            {
+                int num = 0;
+                int oldnum = 0;
+                int lastnum = 0;
+                int eldnum = 0;
+                char math = '+';
+                char lmath = '+';
+                int i = 0,l=s.Length;
+
+                for (i = 0; i < s.Length; i++)
+                {
+                    if (s[i] >= 48 && s[i] <= 57)
+                    {
+                        num = num * 10 + (s[i]-48);
+                       // Console.WriteLine(num);
+                        if (i == s.Length - 1)
+                        {
+                            //Console.WriteLine("**********");
+                            switch (math)
+                            {
+                                case '+': oldnum = oldnum + num; break;
+                                case '-': oldnum = oldnum - num; break;
+                                case '*': oldnum = oldnum * num; break;
+                                case '/':try
+                                        {
+                                           oldnum = oldnum / num;
+                                           break;
+                                         }
+                                         catch (DivideByZeroException)
+                                         {
+                                          throw (new DivideByZeroException("Divide by zero found"));    
+                                         }
+
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        switch (math)
+                        {
+                            case '+': oldnum = oldnum + num; break;
+                            case '-': oldnum = oldnum - num; break;
+                            case '*': oldnum = oldnum * num; break;
+                            case '/': oldnum = oldnum / num; break;
+                        }
+                        math = s[i];
+                        num = 0;
+                    }
+                }
+                return oldnum;
+
+            }
+            else
+            {
+                throw (new StringIsEmptyException("Empty input found"));
+            }
+        }*/
     }
+    public class StringIsEmptyException : ApplicationException
+    {
+        public StringIsEmptyException(string message) : base(message)
+        {
+        }
+    }
+
+
+
+
+}

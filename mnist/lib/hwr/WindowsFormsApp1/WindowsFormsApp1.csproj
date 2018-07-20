@@ -63,6 +63,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="TensorFlowSharp">
+      <HintPath>..\..\..\..\code\bmpWrite\packages\TensorFlowSharp.1.7.0\lib\net461\TensorFlowSharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Form1.cs">
