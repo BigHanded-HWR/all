@@ -294,7 +294,7 @@ namespace Grouping
             //List<int> bb = new List<int>() { 1,2,3,4,5 };
 
             //首先读取现有的文件
-            string fp = "F:\\mnist\\data\\image\\train\\";
+            string fp = "F:\\mnist\\data\\image\\test\\";
             //string fp = "C:\\Users\\29951\\Desktop\\mnist\\train-images\\1\\";
             //Directory.CreateDirectory(fp);
             //File.Move(imgFile[n], fp + (int.Parse(textBox1.Text) + n).ToString() + ".png");
@@ -305,12 +305,16 @@ namespace Grouping
             //将图片保存到数组
             for(var i =0;i< strs.Length;i++)
             {
+                
                 FileInfo fi = new FileInfo(strs[i]);
                 if (fi.Extension == ".png")
                 {
+
                     imgFile.Add(i.ToString()+".png");
+                    Console.WriteLine(strs[i]);
                     point.Add(i);
-                    //Console.WriteLine(i.ToString() + ".png");
+                    
+                    //
                 }
                 /*
                 if (fi.Extension == ".PNG")
@@ -327,7 +331,8 @@ namespace Grouping
             //strs = null;
             //读取label
             //string s = File.ReadAllText(fp + "code_train_text.txt");
-            string s = File.ReadAllText("F:\\mnist\\data\\code_train_text.txt");
+            //string s = File.ReadAllText("F:\\mnist\\data\\code_train_text.txt");
+            string s = File.ReadAllText("F:\\mnist\\data\\image\\test\\label.txt");
             string[] ss=s.Split(new Char[] { ',' });
            
             s = null;

@@ -126,7 +126,7 @@ namespace bmpWrite
                 for (var y = 0; y < MnistImageSize; y++)
                 {
                     
-                    if (grayTmp.GetPixel(x, y) == Color.White)
+                    if (grayTmp.GetPixel(x, y).R == 255)
                     {
                         flag = true;
                     }

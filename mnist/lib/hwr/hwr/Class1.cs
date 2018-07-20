@@ -18,6 +18,7 @@ namespace hwr
         TFGraph graph;
         TFSession session;
         byte[] model;
+       
         private void Load()
         {
             graph = new TFGraph();
@@ -25,7 +26,7 @@ namespace hwr
             session = new TFSession(graph);
             graph.Import(model, "");
         }
-        public string RecImg(Bitmap bmpTest)
+        public List<float[]> RecImg(Bitmap bmpTest)
         {
             this.Load();
             //Bitmap bmpTest = new Bitmap(imgName);
@@ -59,29 +60,35 @@ namespace hwr
             }
 
             var tensor = new TFTensor(Value);
-
             var runner = session.GetRunner();
             runner.AddInput(graph["input"][0], tensor).AddInput(graph["keep_prob"][0], 1.0f).Fetch(graph["output"][0]);
             var output = runner.Run();
-
+            
             var result = output[0];
             var bestIdx = 0;
-            List<int> inf = new List<int>();
-            float p = 0, best = 0;
+
+            List <float[]> inf = new List<float[]>();
+            float best = 0;
             var probabilities = ((float[][])result.GetValue(jagged: true))[0];
             for (int i = 0; i < probabilities.Length; i++)
             {
                 if (probabilities[i] > best)
                 {
+                    float[] a = new float[2];
                     bestIdx = i;
-                    inf.Add(i);
+                    a[0] = i;
+                    a[1] = probabilities[i];
+                    inf.Add(a);
                     best = probabilities[i];
-                    Console.WriteLine(probabilities[i]);
+                    //Console.WriteLine(bestIdx.ToString() + "    ");
+                    //Console.WriteLine(probabilities[i]);
                 }
             }
 
-            return bestIdx.ToString();
-            //return inf[1].ToString();
+
+            //return bestIdx.ToString();
+            //return probabilities;
+            return inf;
 
         }
         private Bitmap GetSmall(Bitmap bm)
